@@ -74,6 +74,13 @@ function cat(x, y) {
   triangle(-2, 0, 2, 0, 0, 4);
 }
 
+function birds(x, y) {
+  //head
+  ellipse(0, 0, 30);
+}
+
+let birdsX = 100;
+let birdsY= 100;
 let catY = 100;
 let catX = 100;
 let velocity = 1;
@@ -83,6 +90,10 @@ let angle = 0;
 
 function draw() {
   greenery(255, 255, 255);
+
+  birds(birdsX, birdsY);
+  birdsX -= birdsX;
+  birdsY = birdsY;
  
   push();
   ellipseMode(CENTER);
