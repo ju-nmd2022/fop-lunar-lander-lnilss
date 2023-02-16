@@ -73,3 +73,47 @@ function cat(x, y) {
   fill(200, 50, 50);
   triangle(-2, 0, 2, 0, 0, 4);
 }
+
+let catY = 100;
+let catX = 100;
+let velocity = 1;
+let acceleration = 0.08;
+let gameIsActive = true;
+let angle = 0;
+
+function draw() {
+  greenery(255, 255, 255);
+ 
+  push();
+  ellipseMode(CENTER);
+  translate(catX, catY);
+  rotate(angle);
+  angle += 0.5;
+  cat(catX, catY);
+  pop();
+  
+  if (gameIsActive) {
+    catY += velocity;
+    velocity += acceleration;
+
+    if (keyIsPressed) {
+      if (keyCode == UP_ARROW) {
+        velocity -= 0.3;
+    } else if (keyCode == DOWN_ARROW) {
+      velocity += 0.3 ;
+    }
+    if (keyIsPressed) {
+      if (keyCode == RIGHT_ARROW) {
+        catX++;
+      } else if (keyCode == LEFT_ARROW) {
+        catX--;
+      }
+    }
+  }
+
+    if (catY > 475) {
+      gameIsActive = false;
+      noLoop();
+    }
+  }
+}
