@@ -1,22 +1,24 @@
 // My first Lunar Lander-style game in JavaScript
 
-//Cat colors
+//Keywords for cat colors
 let catColor = (150, 150, 150);
 let catShade = (125, 125, 125);
 let catDark = (100, 100, 100);
 
-// Starting
+// Starting keywords
+let mode; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
 const startText = "Kitty Lander";
 const play = "Press any key to play";
-//Winning
+//Winning keyword
 const winText = "You saved one of the cat's nine lives!";
-//Losing
+//Losing keyword
 const loseText = "Be meow careful next time!";
-//Play again
+//Play again keyword
 const playAgain = "Press any key to play again";
 
 //Canvas
 function setup() {
+  mode = 0; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
   createCanvas(600, 550);
   background(255, 255, 255);
   angleMode(DEGREES);
@@ -25,7 +27,12 @@ function setup() {
 //Start screen
 function startScreen() {
   background(255, 255, 255);
-  text(startText, 100, 100);
+  fill(0, 0, 0);
+  textAlign(CENTER);
+  textSize(40);
+  text(startText, width / 2, height / 2);
+  textSize(25);
+  text(play, width / 2, height / 2 + 30);
 }
 
 //Game over screen
@@ -41,7 +48,7 @@ function gameOver() {
 
 //Game win screen
 function gameWin() {
-  background(0, 0, 0, 0.2);
+  background(0, 0, 0);
   fill(0, 0, 0);
   textAlign(CENTER);
   textSize(25);
@@ -52,17 +59,22 @@ function gameWin() {
 
 //Background
 function greenery() {
+  //sky
   push();
   noStroke();
   fill("lightblue");
   rect(0, 0, width, height);
 
+  //grass
   fill("darkgreen");
   rect(0, 500, width, 100);
+
+  //clouds
+
+  //tree
 }
 
 //Cat components
-
 function cat(x, y) {
   //tail
   noStroke();
@@ -114,12 +126,12 @@ function cat(x, y) {
 }
 
 //Bird obstacles
-
 function birds(x, y) {
   //head
   ellipse(600, 100, 30);
 }
 
+//Keywords for draw function
 let birdsX = 100;
 let birdsY = 100;
 let catY = 100;
@@ -130,47 +142,71 @@ let gameIsActive = true;
 let angle = 0;
 
 function draw() {
-  greenery(255, 255, 255);
+  if (mode == 0) {
+    //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+    startScreen();
+  }
+  if (mode == 1) {
+    //background
+    greenery(255, 255, 255);
 
-  birds(birdsX, birdsY);
-  birdsX -= birdsX;
-  birdsY = birdsY;
+    //obstacles
+    birds(birdsX, birdsY);
+    birdsX -= birdsX;
+    birdsY = birdsY;
 
-  push();
-  ellipseMode(CENTER);
-  translate(catX, catY);
-  rotate(angle);
-  angle += 1;
-  cat(catX, catY);
-  pop();
+    //cat and its rotation
+    push();
+    ellipseMode(CENTER);
+    translate(catX, catY);
+    rotate(angle);
+    angle += 1;
+    cat(catX, catY);
+    pop();
 
-  if (gameIsActive) {
-    catY += velocity;
-    velocity += acceleration;
+    //game while active if statements
+    if (gameIsActive) {
+      catY += velocity;
+      velocity += acceleration;
 
-    if (keyIsPressed) {
-      if (keyCode == UP_ARROW) {
-        velocity -= 0.3;
-      } else if (keyCode == DOWN_ARROW) {
-        velocity += 0.3;
-      }
       if (keyIsPressed) {
-        if (keyCode == RIGHT_ARROW) {
-          catX++;
-        } else if (keyCode == LEFT_ARROW) {
-          catX--;
+        if (keyCode == UP_ARROW) {
+          //move up
+          velocity -= 0.3;
+        } else if (keyCode == DOWN_ARROW) {
+          //move down
+          velocity += 0.3;
+        }
+        if (keyIsPressed) {
+          if (keyCode == RIGHT_ARROW) {
+            //move right
+            catX++;
+          } else if (keyCode == LEFT_ARROW) {
+            //move left
+            catX--;
+          }
+        }
+      }
+
+      if (catY > 475) {
+        //lowest catY can fall before game stops
+        gameIsActive = false;
+        noLoop();
+        if (angle > 45 && angle < 180) {
+          //not landing on all four paws
+          gameOver();
+        } else if (angle < 45 && angle > 180) {
+          //landing on all four paws
+          gameWin();
         }
       }
     }
+  }
+}
 
-    if (catY > 475) {
-      gameIsActive = false;
-      noLoop();
-      if (angle > 45 && angle < 180) {
-        gameOver();
-      } else if (angle < 45 && angle > 180) {
-        gameWin();
-      }
-    }
+function keyPressed() {
+  //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+  if (keyIsPressed) {
+    mode = 1;
   }
 }
