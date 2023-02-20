@@ -1,14 +1,53 @@
 // My first Lunar Lander-style game in JavaScript
 
+//Cat colors
 let catColor = (150, 150, 150);
 let catShade = (125, 125, 125);
 let catDark = (100, 100, 100);
+
+// Starting
+const startText = "Kitty Lander";
+const play = "Press any key to play";
+//Winning
+const winText = "You saved one of the cat's nine lives!";
+//Losing
+const loseText = "Be meow careful next time!";
+//Play again
+const playAgain = "Press any key to play again";
 
 //Canvas
 function setup() {
   createCanvas(600, 550);
   background(255, 255, 255);
   angleMode(DEGREES);
+}
+
+//Start screen
+function startScreen() {
+  background(255, 255, 255);
+  text(startText, 100, 100);
+}
+
+//Game over screen
+function gameOver() {
+  background(0, 0, 0);
+  fill(255, 255, 0);
+  textAlign(CENTER);
+  textSize(25);
+  text(loseText, width / 2, height / 2);
+  textSize(10);
+  text(playAgain, width / 2, height / 2 + 20);
+}
+
+//Game win screen
+function gameWin() {
+  background(0, 0, 0, 0.2);
+  fill(0, 0, 0);
+  textAlign(CENTER);
+  textSize(25);
+  text(winText, width / 2, height / 2);
+  textSize(10);
+  text(playAgain, width / 2, height / 2 + 20);
 }
 
 //Background
@@ -22,7 +61,7 @@ function greenery() {
   rect(0, 500, width, 100);
 }
 
-//Cat
+//Cat components
 
 function cat(x, y) {
   //tail
@@ -31,10 +70,10 @@ function cat(x, y) {
 
   beginShape();
   vertex(80, 10);
-  bezierVertex(80, 10, 100, - 10, 80, - 30);
-  bezierVertex(80, - 30, 60, - 40, 80, - 60);
-  bezierVertex(80,  - 80, 40, - 40, 70, -20);
-  bezierVertex(70, - 20, 85, - 10, 70, 0);
+  bezierVertex(80, 10, 100, -10, 80, -30);
+  bezierVertex(80, -30, 60, -40, 80, -60);
+  bezierVertex(80, -80, 40, -40, 70, -20);
+  bezierVertex(70, -20, 85, -10, 70, 0);
   endShape();
 
   //legs and feet
@@ -56,31 +95,33 @@ function cat(x, y) {
   //head
   fill(catColor);
   ellipse(0, 0, 30);
-  triangle(- 15, - 5, - 4, - 12, - 15, - 20);
-  triangle( 15, - 5, 4, - 12, 15, - 20);
+  triangle(-15, -5, -4, -12, -15, -20);
+  triangle(15, -5, 4, -12, 15, -20);
   //whiskers
   stroke(0, 0, 0);
   line(-5, 2, -16, -2);
   line(-5, 2, -16, 2);
-  line(5, 2, 16, - 2);
+  line(5, 2, 16, -2);
   line(5, 2, 16, 2);
   //eyes
   noStroke();
   fill(0, 0, 0);
-  ellipse(-6, - 5, 5);
-  ellipse(6, - 5, 5);
+  ellipse(-6, -5, 5);
+  ellipse(6, -5, 5);
   //nose
   fill(200, 50, 50);
   triangle(-2, 0, 2, 0, 0, 4);
 }
 
+//Bird obstacles
+
 function birds(x, y) {
   //head
-  ellipse(0, 0, 30);
+  ellipse(600, 100, 30);
 }
 
 let birdsX = 100;
-let birdsY= 100;
+let birdsY = 100;
 let catY = 100;
 let catX = 100;
 let velocity = 1;
@@ -94,15 +135,15 @@ function draw() {
   birds(birdsX, birdsY);
   birdsX -= birdsX;
   birdsY = birdsY;
- 
+
   push();
   ellipseMode(CENTER);
   translate(catX, catY);
   rotate(angle);
-  angle += 0.5;
+  angle += 1;
   cat(catX, catY);
   pop();
-  
+
   if (gameIsActive) {
     catY += velocity;
     velocity += acceleration;
@@ -110,21 +151,26 @@ function draw() {
     if (keyIsPressed) {
       if (keyCode == UP_ARROW) {
         velocity -= 0.3;
-    } else if (keyCode == DOWN_ARROW) {
-      velocity += 0.3 ;
-    }
-    if (keyIsPressed) {
-      if (keyCode == RIGHT_ARROW) {
-        catX++;
-      } else if (keyCode == LEFT_ARROW) {
-        catX--;
+      } else if (keyCode == DOWN_ARROW) {
+        velocity += 0.3;
+      }
+      if (keyIsPressed) {
+        if (keyCode == RIGHT_ARROW) {
+          catX++;
+        } else if (keyCode == LEFT_ARROW) {
+          catX--;
+        }
       }
     }
-  }
 
     if (catY > 475) {
       gameIsActive = false;
       noLoop();
+      if (angle > 45 && angle < 180) {
+        gameOver();
+      } else if (angle < 45 && angle > 180) {
+        gameWin();
+      }
     }
   }
 }
