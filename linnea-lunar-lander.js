@@ -49,7 +49,7 @@ function gameOver() {
 //Game win screen
 function gameWin() {
   background(0, 0, 0);
-  fill(0, 0, 0);
+  fill(255, 255, 255);
   textAlign(CENTER);
   textSize(25);
   text(winText, width / 2, height / 2);
@@ -188,14 +188,14 @@ function draw() {
         }
       }
 
-      if (catY > 475) {
+      if (catY > 490) {
         //lowest catY can fall before game stops
         gameIsActive = false;
         noLoop();
-        if (angle > 45 && angle < 180) {
+        if (angle < 330 && angle > 30) {
           //not landing on all four paws
           gameOver();
-        } else if (angle < 45 && angle > 180) {
+        } else {
           //landing on all four paws
           gameWin();
         }
