@@ -6,7 +6,7 @@ let catShade = (125, 125, 125);
 let catDark = (100, 100, 100);
 
 // Starting keywords
-let mode; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+let gameMode = "start"; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
 const startText = "Kitty Lander";
 const play = "Press any key to play";
 //Winning keyword
@@ -18,7 +18,6 @@ const playAgain = "Press any key to play again";
 
 //Canvas
 function setup() {
-  mode = 0; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
   createCanvas(600, 550);
   background(255, 255, 255);
   angleMode(DEGREES);
@@ -26,7 +25,6 @@ function setup() {
 
 //Start screen
 function startScreen() {
-  background(255, 255, 255);
   fill(0, 0, 0);
   textAlign(CENTER);
   textSize(40);
@@ -128,12 +126,14 @@ function cat(x, y) {
 //Bird obstacles
 function birds(x, y) {
   //head
-  ellipse(600, 100, 30);
+  fill(0, 0, 0);
+  ellipse(birdsX, birdsY, 30);
+  triangle();
 }
 
 //Keywords for draw function
-let birdsX = 100;
-let birdsY = 100;
+let birdsX = 600;
+let birdsY = random(100, 400);
 let catY = 100;
 let catX = 100;
 let velocity = 1;
@@ -142,18 +142,16 @@ let gameIsActive = true;
 let angle = 0;
 
 function draw() {
-  if (mode == 0) {
-    //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+  //next three lines of code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+  if (gameMode === "start") {
     startScreen();
-  }
-  if (mode == 1) {
+  } else if (gameMode === "play") {
     //background
     greenery(255, 255, 255);
 
     //obstacles
     birds(birdsX, birdsY);
-    birdsX -= birdsX;
-    birdsY = birdsY;
+    birdsX -= 4;
 
     //cat and its rotation
     push();
@@ -186,17 +184,15 @@ function draw() {
             catX--;
           }
         }
-      }
-
-      if (catY > 490) {
+      } else if (catY > 490) {
         //lowest catY can fall before game stops
         gameIsActive = false;
         noLoop();
-        if (angle < 330 && angle > 30) {
-          //not landing on all four paws
+        if ((angle < 330 && angle > 30) || velocity > 4) {
+          //not landing on all four paws OR at high speed
           gameOver();
         } else {
-          //landing on all four paws
+          //landing on all four paws at low speed
           gameWin();
         }
       }
@@ -206,7 +202,11 @@ function draw() {
 
 function keyPressed() {
   //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
-  if (keyIsPressed) {
-    mode = 1;
+  if (gameMode === "start" && keyIsPressed) {
+    gameMode = "play";
+  } else if (gameIsActive === false && gameOver() && keyIsPressed) {
+    startScreen();
+  } else if (gameIsActive === false && gameWin() && keyIsPressed) {
+    startScreen();
   }
 }
