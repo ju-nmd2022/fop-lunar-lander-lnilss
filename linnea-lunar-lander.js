@@ -6,7 +6,6 @@ let catShade = (125, 125, 125);
 let catDark = (100, 100, 100);
 
 // Starting keywords
-let gameMode = "start"; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
 const startText = "Kitty Lander";
 const play = "Press any key to play";
 //Winning keyword
@@ -17,6 +16,7 @@ const loseText = "Be meow careful next time!";
 const playAgain = "Press any key to play again";
 
 //game logic
+let gameMode = "start"; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
 let catY = 100;
 let catX = 100;
 let velocity = 1;
@@ -148,41 +148,40 @@ function gameScreen() {
 
   //game while active if statements
   if (isGameActive) {
-  catY += velocity;
-  velocity += acceleration;
+    catY += velocity;
+    velocity += acceleration;
 
-  if (keyIsPressed) {
-    if (keyCode == UP_ARROW) {
-      //move up
-      velocity -= 0.3;
-    } else if (keyCode == DOWN_ARROW) {
-      //move down
-      velocity += 0.3;
-    }
     if (keyIsPressed) {
-      if (keyCode == RIGHT_ARROW) {
-        //move right
-        catX++;
-      } else if (keyCode == LEFT_ARROW) {
-        //move left
-        catX--;
+      if (keyCode == UP_ARROW) {
+        //move up
+        velocity -= 0.3;
+      } else if (keyCode == DOWN_ARROW) {
+        //move down
+        velocity += 0.3;
+      }
+      if (keyIsPressed) {
+        if (keyCode == RIGHT_ARROW) {
+          //move right
+          catX++;
+        } else if (keyCode == LEFT_ARROW) {
+          //move left
+          catX--;
+        }
+      }
+    }
+    if (catY > 490) {
+      //lowest catY can fall before game stops
+      noLoop();
+      isGameActive = false;
+      if ((angle < 330 && angle > 30) || velocity > 4) {
+        //not landing on all four paws OR at high speed
+        gameMode = "lose";
+      } else {
+        //landing on all four paws at low speed
+        gameMode = "win";
       }
     }
   }
-  if (catY > 490) {
-    //lowest catY can fall before game stops
-    noLoop();
-    if ((angle < 330 && angle > 30) || velocity > 4) {
-      //not landing on all four paws OR at high speed
-      gameMode = "lose";
-      isGameActive = false;
-    } else {
-      //landing on all four paws at low speed
-      gameMode = "win";
-      isGameActive = false;
-    }
-  }
-}
 }
 
 //game states
@@ -203,9 +202,9 @@ function keyPressed() {
   //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
   if (gameMode === "start" && keyIsPressed) {
     gameMode = "play";
-  } else if (gameMode === "lose" && gameOver() && keyIsPressed) {
-    gameMode = "play";
-  } else if (gameMode === "win" && keyIsPressed) {
-    gameMode = "play";
+//   } else if (gameMode === "lose" && keyIsPressed) {
+//     gameMode = "play";
+//   } else if (gameMode === "win" && keyIsPressed) {
+//     gameMode = "play";
   }
 }
