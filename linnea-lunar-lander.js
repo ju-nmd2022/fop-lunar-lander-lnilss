@@ -20,7 +20,7 @@ let gameMode = "start"; //code adapted from Magic Monk on YouTube https://www.yo
 let catY = 100;
 let catX = 100;
 let velocity = 1;
-let acceleration = 0.08;
+let acceleration = 0.1;
 let isGameActive = true;
 let angle = 0;
 
@@ -132,79 +132,75 @@ function cat(x, y) {
   triangle(-2, 0, 2, 0, 0, 4);
 }
 
-//while game is active
-function gameScreen() {
-  //background
-  greenery(255, 255, 255);
+//game states
+function draw() {
+  //next lines of code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+  if (gameMode === "start") {
+    startScreen();
+    if (keyIsPressed === true) {
+      gameMode = "play";
+    }
+  } else if (gameMode === "play") {
+    //background
+    greenery(255, 255, 255);
 
-  //cat and its rotation
-  push();
-  ellipseMode(CENTER);
-  translate(catX, catY);
-  rotate(angle);
-  angle += 1;
-  cat(catX, catY);
-  pop();
+    //cat and its rotation
+    push();
+    ellipseMode(CENTER);
+    translate(catX, catY);
+    rotate(angle);
+    angle += 1;
+    cat(catX, catY);
+    pop();
 
-  //game while active if statements
-  if (isGameActive) {
-    catY += velocity;
-    velocity += acceleration;
+    //game while active if statements
+    if (isGameActive) {
+      catY += velocity;
+      velocity += acceleration;
 
-    if (keyIsPressed) {
-      if (keyCode == UP_ARROW) {
-        //move up
-        velocity -= 0.3;
-      } else if (keyCode == DOWN_ARROW) {
-        //move down
-        velocity += 0.3;
-      }
       if (keyIsPressed) {
-        if (keyCode == RIGHT_ARROW) {
-          //move right
-          catX++;
-        } else if (keyCode == LEFT_ARROW) {
-          //move left
-          catX--;
+        if (keyCode == UP_ARROW) {
+          //move up
+          velocity -= 0.3;
+        } else if (keyCode == DOWN_ARROW) {
+          //move down
+          velocity += 0.3;
+        }
+        if (keyIsPressed) {
+          if (keyCode == RIGHT_ARROW) {
+            //move right
+            catX++;
+          } else if (keyCode == LEFT_ARROW) {
+            //move left
+            catX--;
+          }
+        }
+      }
+      if (catY > 490) {
+        //lowest catY can fall before game stops
+        if ((angle < 330 && angle > 30) || velocity > 4) {
+          //not landing on all four paws OR at high speed
+          noLoop();
+          isGameActive = false;
+          gameMode = "lose";
+          gameOver();
+        } else {
+          //landing on all four paws at low speed
+          isGameActive = false;
+          gameMode = "win";
+          gameWin();
         }
       }
     }
-    if (catY > 490) {
-      //lowest catY can fall before game stops
-      noLoop();
-      isGameActive = false;
-      if ((angle < 330 && angle > 30) || velocity > 4) {
-        //not landing on all four paws OR at high speed
-        gameMode = "lose";
-      } else {
-        //landing on all four paws at low speed
-        gameMode = "win";
-      }
-    }
-  }
-}
-
-//game states
-function draw() {
-  //next three lines of code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
-  if (gameMode === "start") {
-    startScreen();
-  } else if (gameMode === "play") {
-    gameScreen();
   } else if (gameMode === "lose") {
-    gameOver();
+    if (keyIsPressed === true) {
+      gameMode = "start";
+      isGameActive = true;
+    }
   } else if (gameMode === "win") {
-    gameWin();
-  }
-}
-
-function keyPressed() {
-  //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
-  if (gameMode === "start" && keyIsPressed) {
-    gameMode = "play";
-//   } else if (gameMode === "lose" && keyIsPressed) {
-//     gameMode = "play";
-//   } else if (gameMode === "win" && keyIsPressed) {
-//     gameMode = "play";
+    if (keyIsPressed === true) {
+      gameMode = "start";
+      isGameActive = true;
+    }
   }
 }
