@@ -1,9 +1,30 @@
 // My first Lunar Lander-style game in JavaScript
 
 //Keywords for cat colors
-let catColor = (150, 150, 150);
-let catShade = (125, 125, 125);
-let catDark = (100, 100, 100);
+let catColors = [
+  color(150, 150, 150), //gray
+  color(255, 100, 25), //orange
+  color(50, 50, 50), //black
+  color(255, 255, 255), //white
+  color(255, 248, 220), //brown
+];
+let catShades = [
+  color(125, 125, 125), //gray
+  color(225, 75, 0), //orange
+  color(25, 25, 25), //black
+  color(225, 225, 225), //white
+  color(225, 218, 200), //brown
+];
+let catDarks = [
+  color(100, 100, 100), //gray
+  color(255, 100, 25), //orange
+  color(0, 0, 0), //black
+  color(255, 255, 255), //white
+  color(255, 248, 220), //brown
+];
+let catColor = random(catColors);
+let catShade = random(catShades);
+let catDark = random(catDarks);
 
 // Starting keywords
 const startText = "Kitty Lander";
@@ -16,12 +37,16 @@ const loseText = "Be meow careful next time!";
 const playAgain = "Press any key to play again";
 
 //game logic
-let gameMode = "start"; //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+
+//gameMode code adapted from Magic Monk on YouTube
+//https://www.youtube.com/watch?v=TgHhEzKlLb4
+
+let gameMode = "start";
 let catY = 100;
-let catX = 100;
+let catX = width / 2;
 let velocity = 1;
-let acceleration = 0.1;
-let isGameActive = true;
+let acceleration = 0.2;
+let isGameActive = false;
 let angle = 0;
 
 //canvas setup
@@ -44,24 +69,26 @@ function startScreen() {
 
 //game over screen
 function gameOver() {
-  background(0, 0, 0);
-  fill(255, 255, 0);
+  // clear();
+  fill(0, 0, 0);
   textAlign(CENTER);
   textSize(25);
   text(loseText, width / 2, height / 2);
   textSize(10);
   text(playAgain, width / 2, height / 2 + 20);
+  resetGame();
 }
 
 //game win screen
 function gameWin() {
-  background(0, 0, 0);
-  fill(255, 255, 255);
+  // clear();
+  fill(0, 0, 0);
   textAlign(CENTER);
   textSize(25);
   text(winText, width / 2, height / 2);
   textSize(10);
   text(playAgain, width / 2, height / 2 + 20);
+  resetGame();
 }
 
 //background
@@ -134,13 +161,18 @@ function cat(x, y) {
 
 //game states
 function draw() {
-  //next lines of code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
+  //next line of code (gameModes) originally adapted from Magic Monk
+  //on YouTube bc i was confused about states
+  //https://www.youtube.com/watch?v=TgHhEzKlLb4
+
   if (gameMode === "start") {
     startScreen();
     if (keyIsPressed === true) {
       gameMode = "play";
     }
   } else if (gameMode === "play") {
+    let isGameActive = true;
+
     //background
     greenery(255, 255, 255);
 
@@ -149,22 +181,22 @@ function draw() {
     ellipseMode(CENTER);
     translate(catX, catY);
     rotate(angle);
-    angle += 1;
+    angle += 2.5;
     cat(catX, catY);
     pop();
 
     //game while active if statements
-    if (isGameActive) {
+    if (isGameActive === true) {
       catY += velocity;
       velocity += acceleration;
 
       if (keyIsPressed) {
         if (keyCode == UP_ARROW) {
           //move up
-          velocity -= 0.3;
+          velocity -= 0.5;
         } else if (keyCode == DOWN_ARROW) {
           //move down
-          velocity += 0.3;
+          velocity += 0.5;
         }
         if (keyIsPressed) {
           if (keyCode == RIGHT_ARROW) {
@@ -180,7 +212,6 @@ function draw() {
         //lowest catY can fall before game stops
         if ((angle < 330 && angle > 30) || velocity > 4) {
           //not landing on all four paws OR at high speed
-          noLoop();
           isGameActive = false;
           gameMode = "lose";
           gameOver();
@@ -194,13 +225,21 @@ function draw() {
     }
   } else if (gameMode === "lose") {
     if (keyIsPressed === true) {
-      gameMode = "start";
+      gameMode = "play";
       isGameActive = true;
     }
   } else if (gameMode === "win") {
     if (keyIsPressed === true) {
-      gameMode = "start";
+      gameMode = "play";
       isGameActive = true;
     }
   }
+}
+
+function resetGame() {
+  isGameActive = false;
+  velocity = 1;
+  catY = 100;
+  catX = 300;
+  angle = 0;
 }
