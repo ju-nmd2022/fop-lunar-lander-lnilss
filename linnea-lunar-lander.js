@@ -16,15 +16,24 @@ const loseText = "Be meow careful next time!";
 //Play again keyword
 const playAgain = "Press any key to play again";
 
-//Canvas
+//game logic
+let catY = 100;
+let catX = 100;
+let velocity = 1;
+let acceleration = 0.08;
+let isGameActive = true;
+let angle = 0;
+
+//canvas setup
 function setup() {
   createCanvas(600, 550);
   background(255, 255, 255);
   angleMode(DEGREES);
 }
 
-//Start screen
+//start screen
 function startScreen() {
+  background(255, 255, 255);
   fill(0, 0, 0);
   textAlign(CENTER);
   textSize(40);
@@ -33,7 +42,7 @@ function startScreen() {
   text(play, width / 2, height / 2 + 30);
 }
 
-//Game over screen
+//game over screen
 function gameOver() {
   background(0, 0, 0);
   fill(255, 255, 0);
@@ -44,7 +53,7 @@ function gameOver() {
   text(playAgain, width / 2, height / 2 + 20);
 }
 
-//Game win screen
+//game win screen
 function gameWin() {
   background(0, 0, 0);
   fill(255, 255, 255);
@@ -55,7 +64,7 @@ function gameWin() {
   text(playAgain, width / 2, height / 2 + 20);
 }
 
-//Background
+//background
 function greenery() {
   //sky
   push();
@@ -123,80 +132,70 @@ function cat(x, y) {
   triangle(-2, 0, 2, 0, 0, 4);
 }
 
-//Bird obstacles
-function birds(x, y) {
-  //head
-  fill(0, 0, 0);
-  ellipse(birdsX, birdsY, 30);
-  triangle();
+//while game is active
+function gameScreen() {
+  //background
+  greenery(255, 255, 255);
+
+  //cat and its rotation
+  push();
+  ellipseMode(CENTER);
+  translate(catX, catY);
+  rotate(angle);
+  angle += 1;
+  cat(catX, catY);
+  pop();
+
+  //game while active if statements
+  if (isGameActive) {
+  catY += velocity;
+  velocity += acceleration;
+
+  if (keyIsPressed) {
+    if (keyCode == UP_ARROW) {
+      //move up
+      velocity -= 0.3;
+    } else if (keyCode == DOWN_ARROW) {
+      //move down
+      velocity += 0.3;
+    }
+    if (keyIsPressed) {
+      if (keyCode == RIGHT_ARROW) {
+        //move right
+        catX++;
+      } else if (keyCode == LEFT_ARROW) {
+        //move left
+        catX--;
+      }
+    }
+  }
+  if (catY > 490) {
+    //lowest catY can fall before game stops
+    noLoop();
+    if ((angle < 330 && angle > 30) || velocity > 4) {
+      //not landing on all four paws OR at high speed
+      gameMode = "lose";
+      isGameActive = false;
+    } else {
+      //landing on all four paws at low speed
+      gameMode = "win";
+      isGameActive = false;
+    }
+  }
+}
 }
 
-//Keywords for draw function
-let birdsX = 600;
-let birdsY = random(100, 400);
-let catY = 100;
-let catX = 100;
-let velocity = 1;
-let acceleration = 0.08;
-let gameIsActive = true;
-let angle = 0;
-
+//game states
 function draw() {
   //next three lines of code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
   if (gameMode === "start") {
     startScreen();
   } else if (gameMode === "play") {
-    //background
-    greenery(255, 255, 255);
-
-    //obstacles
-    birds(birdsX, birdsY);
-    birdsX -= 4;
-
-    //cat and its rotation
-    push();
-    ellipseMode(CENTER);
-    translate(catX, catY);
-    rotate(angle);
-    angle += 1;
-    cat(catX, catY);
-    pop();
-
-    //game while active if statements
-    if (gameIsActive) {
-      catY += velocity;
-      velocity += acceleration;
-
-      if (keyIsPressed) {
-        if (keyCode == UP_ARROW) {
-          //move up
-          velocity -= 0.3;
-        } else if (keyCode == DOWN_ARROW) {
-          //move down
-          velocity += 0.3;
-        }
-        if (keyIsPressed) {
-          if (keyCode == RIGHT_ARROW) {
-            //move right
-            catX++;
-          } else if (keyCode == LEFT_ARROW) {
-            //move left
-            catX--;
-          }
-        }
-      } else if (catY > 490) {
-        //lowest catY can fall before game stops
-        gameIsActive = false;
-        noLoop();
-        if ((angle < 330 && angle > 30) || velocity > 4) {
-          //not landing on all four paws OR at high speed
-          gameOver();
-        } else {
-          //landing on all four paws at low speed
-          gameWin();
-        }
-      }
-    }
+    gameScreen();
+  } else if (gameMode === "lose") {
+    gameOver();
+  } else if (gameMode === "win") {
+    gameWin();
   }
 }
 
@@ -204,9 +203,9 @@ function keyPressed() {
   //code adapted from Magic Monk on YouTube https://www.youtube.com/watch?v=TgHhEzKlLb4
   if (gameMode === "start" && keyIsPressed) {
     gameMode = "play";
-  } else if (gameIsActive === false && gameOver() && keyIsPressed) {
-    startScreen();
-  } else if (gameIsActive === false && gameWin() && keyIsPressed) {
-    startScreen();
+  } else if (gameMode === "lose" && gameOver() && keyIsPressed) {
+    gameMode = "play";
+  } else if (gameMode === "win" && keyIsPressed) {
+    gameMode = "play";
   }
 }
