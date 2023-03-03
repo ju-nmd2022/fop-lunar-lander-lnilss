@@ -1,30 +1,9 @@
 // My first Lunar Lander-style game in JavaScript
 
 //Keywords for cat colors
-let catColors = [
-  color(150, 150, 150), //gray
-  color(255, 100, 25), //orange
-  color(50, 50, 50), //black
-  color(255, 255, 255), //white
-  color(255, 248, 220), //brown
-];
-let catShades = [
-  color(125, 125, 125), //gray
-  color(225, 75, 0), //orange
-  color(25, 25, 25), //black
-  color(225, 225, 225), //white
-  color(225, 218, 200), //brown
-];
-let catDarks = [
-  color(100, 100, 100), //gray
-  color(255, 100, 25), //orange
-  color(0, 0, 0), //black
-  color(255, 255, 255), //white
-  color(255, 248, 220), //brown
-];
-let catColor = random(catColors);
-let catShade = random(catShades);
-let catDark = random(catDarks);
+let catColor = color(150, 150, 150);
+let catShade = color(125, 125, 125);
+let catDark = color(100, 100, 100);
 
 // Starting keywords
 const startText = "Kitty Lander";
@@ -104,8 +83,34 @@ function greenery() {
   rect(0, 500, width, 100);
 
   //clouds
+  fill("white");
+  ellipse(70, 220, 50);
+  ellipse(100, 200, 60);
+  ellipse(130, 170, 70);
+  ellipse(180, 180, 60);
+  ellipse(210, 200, 50);
+  ellipse(240, 220, 45);
+  ellipse(100, 230, 50);
+  ellipse(150, 220, 80);
+  ellipse(200, 220, 60);
+
+  push();
+  translate(400, 100);
+  scale(0.7);
+  ellipse(70, 220, 50);
+  ellipse(100, 200, 60);
+  ellipse(130, 170, 70);
+  ellipse(180, 180, 60);
+  ellipse(210, 200, 50);
+  ellipse(240, 220, 45);
+  ellipse(100, 230, 50);
+  ellipse(150, 220, 80);
+  ellipse(200, 220, 60);
+  pop();
 
   //tree
+  fill("brown");
+  rect(100, 200, 50, 300);
 }
 
 //Cat components
