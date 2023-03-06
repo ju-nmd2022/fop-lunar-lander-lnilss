@@ -55,35 +55,35 @@ function startScreen() {
   //instructions
   textAlign(LEFT);
   textSize(20);
-  text("= meow to create thrust", width / 2 - 50, height /2 + 80);
-  text("= move & landing speed", width / 2 - 50, height /2 + 140);
+  text("= hold to create thrust", width / 2 - 50, height / 2 + 80);
+  text("= move & landing speed", width / 2 - 50, height / 2 + 140);
 
   //spacebar graphic
   push(); //moves both spacebar and arrow key graphics
-  translate(-50,-30);
+  translate(-50, -30);
 
   stroke(0);
   strokeWeight(2);
   noFill();
   rect(width / 2 - 140, height / 2 + 90, 120, 30, 10);
   //arrow keys graphic
-  fill (0,0,0);
+  fill(0, 0, 0);
 
   push();
-  translate(width/2 - 130, height /2 + 50);
+  translate(width / 2 - 130, height / 2 + 50);
   line(90, 110, 100, 110);
   triangle(100, 100, 110, 110, 100, 120);
   pop();
-  
+
   push();
-  translate(width/2 + 30, height /2 + 80);
+  translate(width / 2 + 30, height / 2 + 80);
   rotate(90);
   line(90, 110, 100, 110);
   triangle(100, 100, 110, 110, 100, 120);
   pop();
 
   push();
-  translate(width/2 - 30, height /2 + 270);
+  translate(width / 2 - 30, height / 2 + 270);
   rotate(180);
   line(90, 110, 100, 110);
   triangle(100, 100, 110, 110, 100, 120);
