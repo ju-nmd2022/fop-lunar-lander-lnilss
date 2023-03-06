@@ -30,7 +30,8 @@ let angle = 0;
 
 //canvas setup
 function setup() {
-  createCanvas(600, 550);
+  let canvas = createCanvas(600, 550);
+  canvas.parent("sketch-holder"); //code from p5.js wiki https://github.com/processing/p5.js/wiki/Positioning-your-canvas
   background(255, 255, 255);
   angleMode(DEGREES);
 }
@@ -38,12 +39,19 @@ function setup() {
 //start screen
 function startScreen() {
   background(255, 255, 255);
+  noStroke();
   fill(0, 0, 0);
   textAlign(CENTER);
   textSize(40);
   text(startText, width / 2, height / 2);
   textSize(25);
   text(play, width / 2, height / 2 + 30);
+
+  //spacebar graphic
+  stroke(0);
+  strokeWeight(2);
+  noFill();
+  rect(width / 2 - 50, height / 2 + 60, 100, 30, 10);
 }
 
 //game over screen
@@ -110,7 +118,35 @@ function greenery() {
 
   //tree
   fill("brown");
-  rect(100, 200, 50, 300);
+  rect(100, 100, 50, 400);
+
+  //branch
+  push();
+  translate(30, 60);
+  beginShape();
+  vertex(150, 100);
+  bezierVertex(150, 100, 110, 250, 120);
+  bezierVertex(250, 120, 350, 100, 400, 90);
+  bezierVertex(400, 90, 360, 70, 310, 80);
+  bezierVertex(310, 80, 230, 100, 150, 80);
+  endShape();
+  pop();
+
+  //leaves
+  fill("green");
+  push();
+  translate(-160, -300);
+  scale(2);
+  ellipse(100, 200, 50);
+  ellipse(100, 200, 60);
+  ellipse(130, 170, 70);
+  ellipse(180, 180, 60);
+  ellipse(210, 200, 50);
+  ellipse(240, 0, 45);
+  ellipse(100, 230, 50);
+  ellipse(150, 220, 80);
+  ellipse(200, 220, 60);
+  pop();
 }
 
 //Cat components
@@ -196,7 +232,7 @@ function draw() {
       velocity += acceleration;
 
       if (keyIsPressed) {
-        if (keyCode == UP_ARROW) {
+        if (keyCode == 32) {
           //move up
           velocity -= 0.5;
         } else if (keyCode == DOWN_ARROW) {
@@ -241,6 +277,7 @@ function draw() {
   }
 }
 
+//reset game to original state after key is pressed
 function resetGame() {
   isGameActive = false;
   velocity = 1;
