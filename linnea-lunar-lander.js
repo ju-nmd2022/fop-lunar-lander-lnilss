@@ -1,9 +1,9 @@
 // My first Lunar Lander-style game in JavaScript
 
-//Keywords for cat colors
-let catColor = color(150, 150, 150);
-let catShade = color(125, 125, 125);
-let catDark = color(100, 100, 100);
+//game mode initialise and canvas setup
+let gameMode = "start";
+let width = 600;
+let height = 550;
 
 // Starting keywords
 const startText = "Kitty Lander";
@@ -20,7 +20,6 @@ const playAgain = "Press any key to play again";
 //gameMode code adapted from Magic Monk on YouTube
 //https://www.youtube.com/watch?v=TgHhEzKlLb4
 
-let gameMode = "start";
 let catY = 100;
 let catX = width / 2;
 let velocity = 1;
@@ -28,10 +27,16 @@ let acceleration = 0.2;
 let isGameActive = false;
 let angle = 0;
 
+//Keywords for cat colors
+let catColor = (150, 150, 150);
+let catShade = (125, 125, 125);
+let catDark = (100, 100, 100);
+
 //canvas setup
 function setup() {
   let canvas = createCanvas(600, 550);
-  canvas.parent("sketch-holder"); //code from p5.js wiki https://github.com/processing/p5.js/wiki/Positioning-your-canvas
+  canvas.parent("sketch-holder");
+  frameRate(30);
   background(255, 255, 255);
   angleMode(DEGREES);
 }
@@ -47,11 +52,44 @@ function startScreen() {
   textSize(25);
   text(play, width / 2, height / 2 + 30);
 
+  //instructions
+  textAlign(LEFT);
+  textSize(20);
+  text("= meow to create thrust", width / 2 - 50, height /2 + 80);
+  text("= move & landing speed", width / 2 - 50, height /2 + 140);
+
   //spacebar graphic
+  push(); //moves both spacebar and arrow key graphics
+  translate(-50,-30);
+
   stroke(0);
   strokeWeight(2);
   noFill();
-  rect(width / 2 - 50, height / 2 + 60, 100, 30, 10);
+  rect(width / 2 - 140, height / 2 + 90, 120, 30, 10);
+  //arrow keys graphic
+  fill (0,0,0);
+
+  push();
+  translate(width/2 - 130, height /2 + 50);
+  line(90, 110, 100, 110);
+  triangle(100, 100, 110, 110, 100, 120);
+  pop();
+  
+  push();
+  translate(width/2 + 30, height /2 + 80);
+  rotate(90);
+  line(90, 110, 100, 110);
+  triangle(100, 100, 110, 110, 100, 120);
+  pop();
+
+  push();
+  translate(width/2 - 30, height /2 + 270);
+  rotate(180);
+  line(90, 110, 100, 110);
+  triangle(100, 100, 110, 110, 100, 120);
+  pop();
+
+  pop();
 }
 
 //game over screen
@@ -186,6 +224,7 @@ function cat(x, y) {
   triangle(15, -5, 4, -12, 15, -20);
   //whiskers
   stroke(0, 0, 0);
+  strokeWeight(1);
   line(-5, 2, -16, -2);
   line(-5, 2, -16, 2);
   line(5, 2, 16, -2);
@@ -251,7 +290,7 @@ function draw() {
       }
       if (catY > 490) {
         //lowest catY can fall before game stops
-        if ((angle < 330 && angle > 30) || velocity > 4) {
+        if ((angle < 340 && angle > 30) || velocity > 4) {
           //not landing on all four paws OR at high speed
           isGameActive = false;
           gameMode = "lose";
