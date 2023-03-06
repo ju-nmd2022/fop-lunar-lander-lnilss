@@ -1,5 +1,14 @@
 // My first Lunar Lander-style game in JavaScript
 
+//canvas setup
+function setup() {
+  let canvas = createCanvas(600, 550);
+  canvas.parent("sketch-holder");
+  frameRate(30);
+  background(255, 255, 255);
+  angleMode(DEGREES);
+}
+
 //game mode initialise and canvas setup
 let gameMode = "start";
 let width = 600;
@@ -31,15 +40,6 @@ let angle = 0;
 let catColor = (150, 150, 150);
 let catShade = (125, 125, 125);
 let catDark = (100, 100, 100);
-
-//canvas setup
-function setup() {
-  let canvas = createCanvas(600, 550);
-  canvas.parent("sketch-holder");
-  frameRate(30);
-  background(255, 255, 255);
-  angleMode(DEGREES);
-}
 
 //start screen
 function startScreen() {
